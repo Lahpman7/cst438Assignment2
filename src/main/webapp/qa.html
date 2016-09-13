@@ -1,0 +1,47 @@
+<!doctype html>
+<head>
+<title>QuestionAnswer</title>
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+</head>
+<body>
+
+<div><span id="question"></span></div>
+<input id="userAnswer" type="text" />
+
+             <button id="submit">Submit</button>
+
+<div id = "fail"></div>
+<div id = "pass"></div>
+
+<script>
+function testAns() {
+  //var oldPattern = $("#pattern").text();
+  //var oldGuesses = $("#oldGuesses").text();
+  var userAnswer = $("#userAnswer").val();
+  var oldQuestion = $("#question").val();
+  $.get("/rest/testanswer",
+        { userAnswer: userAnswer, oldQuestion: oldQuestion },
+        function(testResult) {
+          $("#pass").text(testResult);
+          //$("#oldGuesses").append(newGuesses);
+          //need to incorporate questions and answer here
+          //$("#newGuesses").val("");
+          //$("#newGuesses").focus();
+        })
+   .fail(function(jqXHR, textStatus, errorThrown) {
+           $("#fail").text(textStatus + ": " + errorThrown);
+         });
+};
+
+$(function() {
+  $.get("/rest/randomquestion",
+        function(randquest) {
+          $("#question").text(randquest);//sets question
+          $("#submit").click(testAns);//runs the testAns function when submit clicked
+         // $("#newGuesses").focus();
+        });
+});
+</script>
+
+</body>
+</html>
